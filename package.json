@@ -18,7 +18,8 @@
     "mongoose-findorcreate": "^0.1.2",
     "passport": "0.2.1",
     "passport-instagram": "0.1.2",
-    "passport-facebook": ""
+    "passport-facebook": "",
+    "fbgraph":""
   },
   "engines": {
     "node": "0.10.x"
