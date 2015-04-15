@@ -107,8 +107,7 @@ passport.use(new FacebookStrategy({
       "id":profile.id,
       "access_token":accessToken
     }, function(err, user) {
-      
-      
+      //TODO maybe add nexttick here      
       if (err) { return done(err); }
       done(null, user);
     });
@@ -163,7 +162,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
     if (err) return handleError(err);
     if (user) {
       // doc may be null if no document matched
-      Instagram.users.liked_by_self({
+      Instagram.users.self({
         access_token: user.access_token,
         complete: function(data) {
           //Map will iterate through the returned data obj
@@ -171,12 +170,15 @@ app.get('/photos', ensureAuthenticated, function(req, res){
             //create temporary json object
             tempJSON = {};
             tempJSON.url = item.images.low_resolution.url;
+            tempJSON.caption = item.caption.text;
             //insert json object into image array
             return tempJSON;
           });
           res.render('photos', {photos: imageArr});
         }
-      }); 
+      });
+        //THIS IS WHRE YOU WANT TO START WITH THE PHOTOS AND SHIT
+      FBGraph();
     }
   });
 });
@@ -195,9 +197,9 @@ app.get('/auth/instagram',
   });
 
 app.get('/auth/facebook',
-  passport.authenticate('facebook'),
+  passport.authenticate('facebook', {scope: 'public_profile'}),
   function(req, res){
-    // The request will be redirected to Instagram for authentication, so this
+    // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
   });
 
@@ -210,6 +212,15 @@ app.get('/auth/instagram/callback',
   passport.authenticate('instagram', { failureRedirect: '/login'}),
   function(req, res) {
     res.redirect('/account');
+    console.log(req.user);
+  });
+
+//Same but for FB hopefully
+app.get('/auth/facebook/callback', 
+  passport.authenticate('facebook', { scope: ['public_profile','user_photos', 'read_stream'], failureRedirect: '/login'}),
+  function(req, res) {
+    res.redirect('/account');
+    console.log(req.user);
   });
 
 app.get('/logout', function(req, res){
@@ -221,9 +232,4 @@ http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-//Same but for FB hopefully
-app.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { failureRedirect: '/login'}),
-  function(req, res) {
-    res.redirect('/account');
-  });
+
