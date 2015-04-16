@@ -75,22 +75,13 @@ passport.use(new InstagramStrategy({
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
     models.User.findOrCreate({
-      "name": profile.username,
+      "name": profile.displayName,
       "id": profile.id,
       "access_token": accessToken 
-    }, function(err, user, created) {
-      console.log(models.User);
-      // created will be true here
-      models.User.findOrCreate({}, function(err, user, created) {
-        // created will be false here
-        process.nextTick(function () {
-          // To keep the example simple, the user's Instagram profile is returned to
-          // represent the logged-in user.  In a typical application, you would want
-          // to associate the Instagram account with a user record in your database,
-          // and return that user instead.
-          return done(null, profile);
-        });
-      })
+    }, function(err, user) {
+      //TODO maybe add nexttick here      
+      if (err) { return done(err); }
+      done(null, user);
     });
   }
 ));
