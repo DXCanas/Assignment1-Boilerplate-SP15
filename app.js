@@ -79,7 +79,7 @@ passport.use(new InstagramStrategy({
       "id": profile.id,
       "access_token": accessToken 
     }, function(err, user, created) {
-      
+      console.log(models.User);
       // created will be true here
       models.User.findOrCreate({}, function(err, user, created) {
         // created will be false here
@@ -103,7 +103,7 @@ passport.use(new FacebookStrategy({
   function(accessToken, refreshToken, profile, done) {
     models.User.findOrCreate({
       //don't know if this is supposed to be here
-      "name":profile.username,
+      "name":profile.displayName,
       "id":profile.id,
       "access_token":accessToken
     }, function(err, user) {
@@ -178,7 +178,16 @@ app.get('/photos', ensureAuthenticated, function(req, res){
         }
       });
         //THIS IS WHRE YOU WANT TO START WITH THE PHOTOS AND SHIT
-      FBGraph();
+      FBGraph.res.id.user.home({
+        access_token: user.access_token,
+        complete: function(data){
+          var imageArr = data.map(function(item){
+            tempJSON = {};
+            tempJSON.url = post.picture;
+            tempJSON.caption = post.caption;
+          });
+        }
+      });
     }
   });
 });
