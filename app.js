@@ -173,14 +173,17 @@ app.get('/photos', ensureAuthenticated, function(req, res){
             //insert json object into image array
             return tempJSON;
           });
-          res.render('photos', {photos: imageArr});
+          res.render('photos', {user:req.user, photos: imageArr});
         }
       });
         //THIS IS WHRE YOU WANT TO START WITH THE PHOTOS AND SHIT
       //fb params to grab
     }else if(req.user.provider == 'facebook'){
         FBGraph.get('/' + user.id + '/photos?type=uploaded', function(err,response){
-          /*console.log(response);
+          /*
+          Didn't work,keeping for sentimental reasons
+          
+          console.log(response);
           var imageArr = response.data;
           for(var i; i < imageArr.length; i++){
             console.log(imageArr[i]);
@@ -200,7 +203,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
             //insert json object into image array
             return tempJSON;
           });
-          res.render('photos', {photos: imageArr});
+          res.render('photos', {user:req.user, photos: imageArr});
         });
       }
       else  
@@ -236,7 +239,7 @@ app.get('/auth/facebook',
 app.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login'}),
   function(req, res) {
-    res.redirect('/account');
+    res.redirect('/photos');
     console.log(req.user);
   });
 
@@ -245,7 +248,7 @@ app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { scope: ['public_profile','user_photos', 'read_stream'], failureRedirect: '/login'}),
   function(req, res) {
     //console.log(res.access_token);
-    res.redirect('/account');
+    res.redirect('/photos');
     console.log(req.user);
   });
 

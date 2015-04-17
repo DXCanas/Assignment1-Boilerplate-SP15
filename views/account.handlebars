@@ -1,5 +1,32 @@
-Hello {{user.name}}!
-<p>ID: {{user.id}}</p>
-<p>Username: {{user.username}}</p>
-<p>Name:{{user.name}}</p>
-<a href="/photos">Go to Photos</a>
+<div class="container">
+  <center>
+    <div class="row">
+      <h1>Hello {{user.name}}!</h1>
+    </div>
+
+    <div class="row">
+      <h3>Account Information:</h3>
+      <p>Name:{{user.name}}</p>
+      <p>ID: {{user.id}}</p>
+      {{#if user.username}}
+        <p>Username: {{user.username}}</p>
+      {{/if}}
+    </div>
+    
+    <div class="row">
+      <!--return to photos button-->
+        <a href="/photos">
+          <button type="button" class="btn btn-success btn-lg">
+            Back to Photos <i class="fa fa-picture-o"></i>
+          </button>
+        </a>
+      
+      <!--logout button-->
+      <a href="/logout">
+        <button type="button" class="btn btn-danger btn-lg">
+          Log Out <i class="fa fa-sign-out"></i>
+        </button>
+      </a>
+    </div>
+  </center>
+</div>
