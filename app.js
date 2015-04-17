@@ -77,7 +77,9 @@ passport.use(new InstagramStrategy({
     models.User.findOrCreate({
       "name": profile.displayName,
       "id": profile.id,
-      "access_token": accessToken 
+      "access_token": accessToken,
+      "username": profile.username,
+      "provider":profile.provider
     }, function(err, user) {
       //TODO maybe add nexttick here      
       if (err) { return done(err); }
@@ -96,9 +98,14 @@ passport.use(new FacebookStrategy({
       //don't know if this is supposed to be here
       "name":profile.displayName,
       "id":profile.id,
-      "access_token":accessToken
+      "access_token":accessToken,
+      //added username field to models
+      "username":profile._json,
+      "provider":profile.provider
     }, function(err, user) {
-      //TODO maybe add nexttick here      
+      //TODO maybe add nexttick here   
+      //console.log(accessToken);
+      FBGraph.setAccessToken(accessToken);
       if (err) { return done(err); }
       done(null, user);
     });
@@ -151,7 +158,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
   var query  = models.User.where({ name: req.user.username });
   query.findOne(function (err, user) {
     if (err) return handleError(err);
-    if (user) {
+    if (req.user.provider == 'instagram') {
       // doc may be null if no document matched
       Instagram.users.self({
         access_token: user.access_token,
@@ -159,7 +166,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
           //Map will iterate through the returned data obj
           var imageArr = data.map(function(item) {
             //create temporary json object
-            tempJSON = {};
+            var tempJSON = {};
             tempJSON.url = item.images.low_resolution.url;
             tempJSON.caption = item.caption.text;
             //insert json object into image array
@@ -169,17 +176,31 @@ app.get('/photos', ensureAuthenticated, function(req, res){
         }
       });
         //THIS IS WHRE YOU WANT TO START WITH THE PHOTOS AND SHIT
-      FBGraph.res.id.user.home({
-        access_token: user.access_token,
-        complete: function(data){
-          var imageArr = data.map(function(item){
-            tempJSON = {};
-            tempJSON.url = post.picture;
-            tempJSON.caption = post.caption;
+      //fb params to grab
+    }else if(req.user.provider == 'facebook'){
+        FBGraph.get('/' + user.id + '/home', function(err,response){
+          /*console.log(response);
+          var imageArr = response.data;
+          for(var i; i < imageArr.length; i++){
+            console.log(imageArr[i]);
+            imageArr[i].url = imageArr[i].picture;
+            imageArr[i].caption = imageArr[i].message;
+          }
+          res.render('photos', {photos:imageArr});*/
+          
+          var imageArr = response.data.map(function(item) {
+            //create temporary json object
+            var tempJSON = {};
+            tempJSON.url = item.picture;
+            tempJSON.caption = item.message;
+            //insert json object into image array
+            return tempJSON;
           });
-        }
-      });
-    }
+          res.render('photos', {photos: imageArr});
+        });
+      }
+      else  
+        console.log("I'm dead");
   });
 });
 
@@ -197,7 +218,7 @@ app.get('/auth/instagram',
   });
 
 app.get('/auth/facebook',
-  passport.authenticate('facebook', {scope: 'public_profile'}),
+  passport.authenticate('facebook', { scope: ['public_profile','user_photos', 'read_stream'], failureRedirect: '/login'}),
   function(req, res){
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
@@ -219,6 +240,7 @@ app.get('/auth/instagram/callback',
 app.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { scope: ['public_profile','user_photos', 'read_stream'], failureRedirect: '/login'}),
   function(req, res) {
+    //console.log(res.access_token);
     res.redirect('/account');
     console.log(req.user);
   });
