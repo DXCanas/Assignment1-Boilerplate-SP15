@@ -165,9 +165,10 @@ app.get('/photos', ensureAuthenticated, function(req, res){
         complete: function(data) {
           //Map will iterate through the returned data obj
           var imageArr = data.map(function(item) {
+            console.log(item.images);
             //create temporary json object
             var tempJSON = {};
-            tempJSON.url = item.images.low_resolution.url;
+            tempJSON.url = item.images.standard_resolution.url;
             tempJSON.caption = item.caption.text;
             //insert json object into image array
             return tempJSON;
@@ -178,7 +179,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
         //THIS IS WHRE YOU WANT TO START WITH THE PHOTOS AND SHIT
       //fb params to grab
     }else if(req.user.provider == 'facebook'){
-        FBGraph.get('/' + user.id + '/home', function(err,response){
+        FBGraph.get('/' + user.id + '/photos?type=uploaded', function(err,response){
           /*console.log(response);
           var imageArr = response.data;
           for(var i; i < imageArr.length; i++){
@@ -188,11 +189,14 @@ app.get('/photos', ensureAuthenticated, function(req, res){
           }
           res.render('photos', {photos:imageArr});*/
           
+          response.paging.limit = 100;
+          
           var imageArr = response.data.map(function(item) {
             //create temporary json object
+            item.width = 1000;
             var tempJSON = {};
-            tempJSON.url = item.picture;
-            tempJSON.caption = item.message;
+            tempJSON.url = item.source;
+            tempJSON.caption = item.name;
             //insert json object into image array
             return tempJSON;
           });
