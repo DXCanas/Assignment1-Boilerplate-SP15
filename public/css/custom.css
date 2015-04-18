@@ -7,11 +7,8 @@ img{
 gutterSizer{
   width: 15%;
 }
-.container-fluid{
-  margin-left:0;
-  margin-right: 0;
+.photoGridContainer{
   padding-left:10%;
-  paddint-right:0;
 }
 
 .navbar{
