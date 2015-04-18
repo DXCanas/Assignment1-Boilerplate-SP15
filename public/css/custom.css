@@ -15,3 +15,7 @@ gutterSizer{
   background-image: url(../img/noisy_grid.png);
   background-repeat: repeat;
 }
+
+.navbar .container-fluid{
+  background-color: white;
+}
