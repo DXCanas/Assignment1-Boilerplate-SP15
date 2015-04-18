@@ -1,0 +1,19 @@
+.gutterSizer .col-sm-3{
+  padding:0 !important;
+}
+img{
+  width: 100%;
+}
+gutterSizer{
+  width: 15%;
+}
+.container-fluid{
+  margin-left:0;
+  margin-right: 0;
+  padding-left:10%;
+  paddint-right:0;
+}
+
+.navbar{
+  background: #B8DBD3;
+}

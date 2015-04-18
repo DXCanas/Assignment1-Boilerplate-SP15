@@ -1,8 +1,10 @@
 <div class="container-fluid">
+  <div class="gutterSizer"></div>
   {{#each photos}}
-    <div class="col-sm-4 col-md-3 photoContainer">
-      <img src="{{url}}" class="img-responsive img-thumbnail" class="img hashtag-img">
-      <p class="captionContainer">{{caption}}</p>
+    <div class="col-sm-2 photoContainer img-thumbnail">
+      <img src="{{url}}" class="img-responsive" class="img hashtag-img">
+      <center><br><p class="captionContainer">{{caption}}<br></p></center>
+      <span></span>
     </div>
   {{/each}}
 </div>

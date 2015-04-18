@@ -65,9 +65,17 @@
     {{{body}}}  
   </div>
     
-    <!--Code by David Canas-->
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
+  <!--Code by David Canas-->
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js">
+  </script>
+  <script src="js/bootstrap.js"></script>
+  <script>
+    var $container = jQuery('.container-fluid');
+    $container.masonry({
+      itemSelector : '.photoContainer'
+    });    
+  </script>
 </body>
 </html>
 
