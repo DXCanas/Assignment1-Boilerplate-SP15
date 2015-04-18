@@ -11,6 +11,7 @@ gutterSizer{
   padding-left:10%;
 }
 
-.navbar{
-  background: #B8DBD3;
+.container, .container-fluid,html,body{
+  background-image: url(../img/noisy_grid.png);
+  background-repeat: repeat;
 }

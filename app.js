@@ -179,7 +179,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
         //THIS IS WHRE YOU WANT TO START WITH THE PHOTOS AND SHIT
       //fb params to grab
     }else if(req.user.provider == 'facebook'){
-        FBGraph.get('/' + user.id + '/photos', function(err,response){
+        FBGraph.get('/' + user.id + '/photos?type=uploaded', function(err,response){
           /*
           Didn't work,keeping for sentimental reasons
           
