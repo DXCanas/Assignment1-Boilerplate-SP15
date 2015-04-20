@@ -165,7 +165,7 @@ app.get('/photos', ensureAuthenticated, function(req, res){
         complete: function(data) {
           //Map will iterate through the returned data obj
           var imageArr = data.map(function(item) {
-            console.log(item.images);
+            //console.log(item.images);
             //create temporary json object
             var tempJSON = {};
             tempJSON.url = item.images.standard_resolution.url;
@@ -240,7 +240,7 @@ app.get('/auth/instagram/callback',
   passport.authenticate('instagram', { failureRedirect: '/login'}),
   function(req, res) {
     res.redirect('/photos');
-    console.log(req.user);
+    //console.log(req.user);
   });
 
 //Same but for FB hopefully
@@ -249,7 +249,7 @@ app.get('/auth/facebook/callback',
   function(req, res) {
     //console.log(res.access_token);
     res.redirect('/photos');
-    console.log(req.user);
+    //console.log(req.user);
   });
 
 app.get('/logout', function(req, res){

@@ -12,3 +12,25 @@
   box-shadow: 2px gray;
   background:white;
 }
+
+.gutterSizer .col-sm-3{
+  padding:0 !important;
+}
+img{
+  width: 100%;
+}
+gutterSizer{
+  width: 15%;
+}
+.photoGridContainer{
+  padding-left:10%;
+}
+
+.container, .container-fluid,html,body{
+  background-image: url(../img/noisy_grid.png);
+  background-repeat: repeat;
+}
+
+.navbar .container-fluid{
+  background-image:none;
+}
