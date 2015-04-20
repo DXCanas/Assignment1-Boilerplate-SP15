@@ -1,0 +1,14 @@
+#viewinject{
+  -webkit-transition:all 1s ease-in-out;
+  -moz-transition:all 1s ease-in-out
+  transition:all 1s ease-in-out;
+}
+.captionContainer{
+  height:5em;
+  overflow-y:auto;
+}
+
+.photoContainer{
+  box-shadow: 2px gray;
+  background:white;
+}
